@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenWaste Rewards | Waste Management Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ====== VARIABLES & THEMES ====== */
+    :root {
+      /* Green Theme */
+      --bg-primary: #f0f9f1;
+      --bg-secondary: rgba(240, 249, 241, 0.9);
+      --text-primary: #1a5d1a;
+      --text-secondary: #2e8b57;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --border-color: rgba(46, 139, 87, 0.2);
+      --shadow: 0 8px 32px rgba(46, 139, 87, 0.15);
+      --btn-bg: #2e8b57;
+      --btn-hover: #228b22;
+      --btn-text: white;
+      --accent: #32cd32;
+      --success: #4ade80;
+      --warning: #facc15;
+      --error: #f87171;
+      --theme-icon: "🌙";
+    }
+
+    .dark-theme {
+      /* Dark Green Theme */
+      --bg-primary: #0a2e1a;
+      --bg-secondary: rgba(10, 46, 26, 0.85);
+      --text-primary: #e0f0e0;
+      --text-secondary: #a8d8a8;
+      --card-bg: rgba(20, 60, 30, 0.9);
+      --border-color: rgba(176, 224, 180, 0.2);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --btn-bg: #32cd32;
+      --btn-hover: #228b22;
+      --btn-text: #0a2e1a;
+      --accent: #90ee90;
+      --success: #4ade80;
+      --warning: #facc15;
+      --error: #f87171;
+      --theme-icon: "☀️";
+    }
+
+    /* ====== GLOBAL STYLES ====== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(rgba(10, 40, 20, 0.7), rgba(10, 40, 20, 0.9)), 
+                  url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background 0.4s ease, color 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ====== NAVBAR ====== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: var(--bg-secondary);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--btn-bg);
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 1.8rem;
+    }
+
+    .navbar nav a {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 600;
+      position: relative;
+      padding: 0.4rem 0;
+      transition: color 0.3s ease;
+      font-size: 1.05rem;
+    }
+
+    .navbar nav a:hover {
+      color: var(--btn-bg);
+    }
+
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--btn-bg);
+      transition: width 0.3s ease;
+    }
+
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-btn:hover {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+    }
+
+    /* ====== PAGE CONTAINER ====== */
+    .page-container {
+      display: none;
+      flex: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .active-page {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====== HOME PAGE ====== */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 1rem;
+      margin-bottom: 3rem;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--btn-bg), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin-bottom: 2.5rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(46, 139, 87, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .cta-button:hover {
+      background: var(--btn-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(46, 139, 87, 0.5);
+    }
+
+    /* ====== WASTE TO MONEY SECTION ====== */
+    .waste-to-money-section {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem auto;
+      max-width: 1200px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .waste-to-money-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--btn-bg);
+      background: linear-gradient(135deg, var(--btn-bg), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .money-conversion-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+      background: #f8f8f8;
+      padding: 2rem;
+    }
+
+    .money-conversion-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .conversion-description {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .conversion-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--btn-bg);
+    }
+
+    .conversion-points {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 1rem 0;
+      padding: 0.8rem 1.5rem;
+      background: rgba(46, 139, 87, 0.15);
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .conversion-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .step-card {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .step-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--btn-bg);
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .step-description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* ====== FEATURES SECTION ====== */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .feature-card i {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--btn-bg);
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ====== SPONSORSHIP SECTION ====== */
+    .sponsorship-section {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem auto;
+      max-width: 1200px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .sponsorship-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--btn-bg);
+      background: linear-gradient(135deg, var(--btn-bg), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sponsor-banner {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 2rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .sponsor-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .sponsor-info {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .sponsor-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--btn-bg);
+    }
+
+    .sponsor-funding {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 1rem 0;
+      padding: 0.8rem 1.5rem;
+      background: rgba(46, 139, 87, 0.15);
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .sponsor-description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+
+    /* ====== PARTNERS SECTION ====== */
+    .partners-section {
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    .partners-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, var(--btn-bg), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .partner-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .partner-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .partner-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      color: var(--btn-bg);
+    }
+
+    .partner-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .partner-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* ====== VIDEO UPLOAD SECTION ====== */
+    .upload-section {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem auto;
+      max-width: 800px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .upload-section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--btn-bg);
+    }
+
+    .upload-section p {
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .upload-area {
+      border: 3px dashed var(--border-color);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      margin: 1.5rem 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .upload-area:hover {
+      border-color: var(--btn-bg);
+      background: rgba(46, 139, 87, 0.05);
+    }
+
+    .upload-area i {
+      font-size: 4rem;
+      color: var(--btn-bg);
+      margin-bottom: 1rem;
+    }
+
+    .upload-area h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-area p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    .upload-btn {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .upload-btn:hover {
+      background: var(--btn-hover);
+      transform: translateY(-2px);
+    }
+
+    .video-preview {
+      display: none;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .video-preview video {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .submit-btn:hover {
+      background: #38a169;
+      transform: translateY(-2px);
+    }
+
+    /* ====== AI VERIFICATION SECTION ====== */
+    .ai-verification {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem auto;
+      max-width: 800px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      display: none;
+    }
+
+    .ai-verification h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--btn-bg);
+    }
+
+    .verification-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .result-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .result-details {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .points-earned {
+      display: inline-block;
+      background: rgba(46, 139, 87, 0.15);
+      color: var(--btn-bg);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    /* ====== REWARDS PAGE ====== */
+    .rewards-container {
+      padding: 2rem 0;
+    }
+
+    .rewards-container h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      background: linear-gradient(135deg, var(--btn-bg), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .reward-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .reward-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .reward-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .reward-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      flex-grow: 1;
+    }
+
+    .points {
+      display: inline-block;
+      background: rgba(46, 139, 87, 0.15);
+      color: var(--btn-bg);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-secondary {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+      width: 100%;
+      font-size: 1.05rem;
+    }
+
+    .btn-secondary:hover {
+      background: var(--btn-hover);
+      transform: scale(1.03);
+      box-shadow: 0 6px 16px rgba(46, 139, 87, 0.4);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    /* ====== THEME TOGGLE BUTTON ====== */
+    .theme-btn {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      z-index: 99;
+    }
+
+    .theme-btn:hover {
+      transform: rotate(20deg) scale(1.1);
+    }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      background: var(--bg-secondary);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+      color: var(--btn-bg);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--btn-bg);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-color);
+      margin-top: 2rem;
+    }
+
+    /* ====== LOADING SPINNER ====== */
+    .spinner {
+      display: none;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(46, 139, 87, 0.3);
+      border-top: 5px solid var(--btn-bg);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.2rem;
+      }
+
+      .logo {
+        font-size: 1.4rem;
+      }
+
+      .navbar nav {
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .rewards-container h1 {
+        font-size: 2rem;
+      }
+
+      .reward-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .upload-section,
+      .ai-verification {
+        padding: 1.5rem;
+      }
+      
+      .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .sponsorship-section {
+        padding: 1.5rem;
+      }
+      
+      .sponsor-banner {
+        max-width: 100%;
+      }
+      
+      .waste-to-money-section {
+        padding: 1.5rem;
+      }
+      
+      .money-conversion-image {
+        max-width: 100%;
+      }
+      
+      .conversion-steps {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-container {
+        padding: 1.5rem 1rem;
+      }
+
+      .hero {
+        padding: 2rem 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .upload-area {
+        padding: 2rem 1rem;
+      }
+      
+      .upload-area i {
+        font-size: 3rem;
+      }
+      
+      .partners-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-recycle"></i>
+      <span>GreenWaste Rewards</span>
+    </div>
+    <nav>
+      <a href="#" class="nav-link" data-page="home">Home</a>
+      <a href="#" class="nav-link" data-page="rewards">Rewards</a>
+      <a href="#" class="nav-link" data-page="upload">Upload Video</a>
+      <a href="#" class="nav-link" data-page="about">About</a>
+      <a href="http://127.0.0.1:3000/login.html" class="nav-link login-link">Login</a>
+    </nav>
+  </header>
+
+  <!-- Home Page -->
+  <main id="home-page" class="page-container active-page">
+    <section class="hero">
+      <h1>Turn Waste into Rewards</h1>
+      <p>Upload videos of your green waste management activities and earn points redeemable for exciting rewards. Together, we can make a greener planet!</p>
+      <button class="cta-button" id="upload-video-btn">
+        <i class="fas fa-video"></i> Get Started
+      </button>
+    </section>
+
+    <!-- Waste to Money Section -->
+    <section class="waste-to-money-section">
+      <h2>Waste Management Converted Into Money</h2>
+      <div class="money-conversion-image">
+        <img src="https://via.placeholder.com/800x400/4CAF50/FFFFFF?text=Waste+to+Money+Conversion" alt="Waste Management Converted Into Money">
+      </div>
+      <div class="conversion-description">
+        <h3 class="conversion-title">How Your Waste Earns You Money</h3>
+        <div class="conversion-points">Earn ₹10-₹500 per submission based on waste type and quantity</div>
+        <p class="conversion-steps-title">Simple 3-Step Process:</p>
+        
+        <div class="conversion-steps">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h4 class="step-title">Record & Upload</h4>
+            <p class="step-description">Capture your green waste management activities in a short video and upload it to our platform.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h4 class="step-title">AI Verification</h4>
+            <p class="step-description">Our AI system analyzes your video to verify the type and quantity of waste being managed properly.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h4 class="step-title">Earn & Redeem</h4>
+            <p class="step-description">Receive points that convert to cash value or redeem them for eco-friendly products and services.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sponsorship Section -->
+    <section class="sponsorship-section">
+      <h2>Our Generous Sponsor</h2>
+      <div class="sponsor-banner">
+        <img src="../Css2.25/balaji.jpeg" alt="Shri Balaji Stationers Advertisement Banner" >
+      </div>
+      <div class="sponsor-info">
+        <h3 class="sponsor-title">Shri Balaji Stationers</h3>
+        <div class="sponsor-funding">₹1000 Funding Contribution</div>
+        <p class="sponsor-description">
+          We're proud to announce our partnership with Shri Balaji Stationers, who has generously contributed ₹1000 to support our green waste management initiatives. Their commitment to sustainability helps us provide better rewards and expand our community outreach programs.
+        </p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <i class="fas fa-seedling"></i>
+        <h3>Eco-Friendly Actions</h3>
+        <p>Compost, recycle, or properly dispose of green waste to earn points.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-trophy"></i>
+        <h3>Reward System</h3>
+        <p>Redeem your points for gift cards, eco-products, and community recognition.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-leaf"></i>
+        <h3>Green Community</h3>
+        <p>Join a community of eco-warriors making a difference in waste management.</p>
+      </div>
+    </section>
+    
+    <!-- Partners Section -->
+    <section class="partners-section">
+      <h2>Our Valued Partners</h2>
+      <div class="partners-grid">
+        <div class="partner-card">
+          <div class="partner-logo">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3>EcoFund</h3>
+          <p>Providing financial support for sustainable initiatives</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-logo">
+            <i class="fas fa-globe-americas"></i>
+          </div>
+          <h3>GreenEarth</h3>
+          <p>Funding environmental conservation projects</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-logo">
+            <i class="fas fa-hand-holding-water"></i>
+          </div>
+          <h3>SustainaCorp</h3>
+          <p>Corporate sponsor for waste management programs</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-logo">
+            <i class="fas fa-tree"></i>
+          </div>
+          <h3>ForestFuture</h3>
+          <p>Supporting reforestation and waste reduction</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Upload & Verification Page -->
+  <main id="upload-page" class="page-container">
+    <!-- Video Upload Section -->
+    <section class="upload-section">
+      <h2>How It Works</h2>
+      <p>Record a short video showing your green waste management activity (composting, recycling, etc.). Upload it to earn points!</p>
+      
+      <div class="upload-area" id="upload-area">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <h3>Click to Upload Video</h3>
+        <p>MP4, MOV, or AVI (Max 100MB)</p>
+        <input type="file" id="file-input" accept="video/*">
+      </div>
+      
+      <button class="upload-btn" id="browse-btn">
+        <i class="fas fa-folder-open"></i> Browse Files
+      </button>
+      
+      <div class="video-preview" id="video-preview">
+        <video id="preview-video" controls></video>
+        <p>Your video is ready to submit!</p>
+      </div>
+      
+      <button class="submit-btn" id="submit-btn">
+        <i class="fas fa-paper-plane"></i> Submit for AI Verification
+      </button>
+    </section>
+    
+    <!-- Loading Spinner -->
+    <div class="spinner" id="verification-spinner"></div>
+    
+    <!-- AI Verification Result -->
+    <section class="ai-verification" id="ai-verification">
+      <h2>AI Verification Result</h2>
+      <div class="verification-result">
+        <div class="result-icon" id="result-icon">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <div class="result-text" id="result-text">Analyzing your video...</div>
+        <div class="result-details" id="result-details">
+          Our AI system is analyzing the waste materials in your video to determine if they are biodegradable.
+        </div>
+        <div class="points-earned" id="points-earned">+0 Points</div>
+      </div>
+      <button class="cta-button" id="upload-another-btn">
+        <i class="fas fa-plus-circle"></i> Upload Another Video
+      </button>
+    </section>
+  </main>
+
+  <!-- Rewards Page -->
+  <main id="rewards-page" class="page-container rewards-container">
+    <h1>Available Rewards 🌱</h1>
+    <div class="reward-grid">
+      <div class="reward-card">
+        <h3>Eco Starter Kit</h3>
+        <span class="points">100 Points</span>
+        <p>Compost bin, reusable bags, and seed packets to start your green journey.</p>
+        <button class="btn-secondary">Redeem</button>
+      </div>
+      <div class="reward-card">
+        <h3>Local Farm Voucher</h3>
+        <span class="points">250 Points</span>
+        <p>$25 voucher for organic produce at local farmers markets.</p>
+        <button class="btn-secondary">Redeem</button>
+      </div>
+      <div class="reward-card">
+        <h3>Tree Planting</h3>
+        <span class="points">500 Points</span>
+        <p>We'll plant a tree in your name in a reforestation project.</p>
+        <button class="btn-secondary">Redeem</button>
+      </div>
+      <div class="reward-card">
+        <h3>Premium Composter</h3>
+        <span class="points">1000 Points</span>
+        <p>High-efficiency home composter with odor control system.</p>
+        <button class="btn-secondary">Redeem</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- About Page -->
+  <main id="about-page" class="page-container">
+    <div class="page-header">
+      <h2>About GreenWaste Rewards</h2>
+      <p>We're on a mission to incentivize proper green waste management through our innovative rewards program.</p>
+    </div>
+    
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-img">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="member-info">
+          <h3>Environmental Team</h3>
+          <p>Waste Management Experts</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="member-img">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="member-info">
+          <h3>Community Leaders</h3>
+          <p>Local Sustainability Advocates</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="member-img">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="member-info">
+          <h3>Tech Developers</h3>
+          <p>Platform Creators</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Theme Toggle Button -->
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>GreenWaste Rewards</h3>
+        <p>Earn points for eco-friendly waste management and redeem them for sustainable rewards.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <div class="footer-links">
+          <a href="#" class="nav-link" data-page="home">Home</a>
+          <a href="#" class="nav-link" data-page="rewards">Rewards</a>
+          <a href="#" class="nav-link" data-page="upload">Upload Video</a>
+          <a href="#" class="nav-link" data-page="about">About Us</a>
+          <a href="http://127.0.0.1:3000/login.html" class="nav-link login-link">Login</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <div class="footer-links">
+          <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+          <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+          <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2023 GreenWaste Rewards. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Page Navigation (only for internal pages)
+    document.querySelectorAll('.nav-link:not(.login-link)').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetPage = link.getAttribute('data-page');
+        showPage(targetPage);
+      });
+    });
+
+    // Special navigation buttons
+    document.getElementById('upload-video-btn').addEventListener('click', () => {
+      showPage('upload');
+    });
+    
+    document.getElementById('upload-another-btn').addEventListener('click', () => {
+      showPage('upload');
+      // Reset upload form
+      document.getElementById('file-input').value = '';
+      document.getElementById('video-preview').style.display = 'none';
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('preview-video').src = '';
+      document.getElementById('ai-verification').style.display = 'none';
+    });
+
+    // Show specific page
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page-container').forEach(page => {
+        page.classList.remove('active-page');
+      });
+      
+      // Show requested page
+      document.getElementById(`${pageId}-page`).classList.add('active-page');
+      
+      // Update navigation state
+      document.querySelectorAll('.nav-link:not(.login-link)').forEach(link => {
+        if (link.getAttribute('data-page') === pageId) {
+          link.style.color = 'var(--btn-bg)';
+        } else {
+          link.style.color = '';
+        }
+      });
+    }
+
+    // Video Upload Functionality
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const browseBtn = document.getElementById('browse-btn');
+    const videoPreview = document.getElementById('video-preview');
+    const previewVideo = document.getElementById('preview-video');
+    const submitBtn = document.getElementById('submit-btn');
+    const verificationSpinner = document.getElementById('verification-spinner');
+    const aiVerification = document.getElementById('ai-verification');
+    const resultIcon = document.getElementById('result-icon');
+    const resultText = document.getElementById('result-text');
+    const resultDetails = document.getElementById('result-details');
+    const pointsEarned = document.getElementById('points-earned');
+
+    // Open file dialog when clicking upload area or browse button
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    browseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput.click();
+    });
+
+    // Handle file selection
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const file = this.files[0];
+        
+        // Check if file is a video
+        if (file.type.startsWith('video/')) {
+          // Create video preview
+          const videoURL = URL.createObjectURL(file);
+          previewVideo.src = videoURL;
+          
+          // Show preview and submit button
+          videoPreview.style.display = 'block';
+          submitBtn.style.display = 'inline-block';
+          
+          // Scroll to preview
+          videoPreview.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert('Please select a valid video file (MP4, MOV, or AVI).');
+        }
+      }
+    });
+
+    // Handle video submission
+    submitBtn.addEventListener('click', () => {
+      if (fileInput.files.length > 0) {
+        // Show loading spinner
+        verificationSpinner.style.display = 'block';
+        submitBtn.disabled = true;
+        
+        // Simulate AI processing (in real app, this would be an API call)
+        setTimeout(() => {
+          verificationSpinner.style.display = 'none';
+          submitBtn.disabled = false;
+          
+          // Randomly determine if waste is biodegradable (for demo purposes)
+          const isBiodegradable = Math.random() > 0.3;
+          const points = isBiodegradable ? Math.floor(Math.random() * 150) + 50 : 0;
+          
+          // Update verification result
+          if (isBiodegradable) {
+            resultIcon.innerHTML = '<i class="fas fa-check-circle" style="color: var(--success);"></i>';
+            resultText.textContent = 'Biodegradable Waste Detected!';
+            resultDetails.textContent = 'Great job! Your waste is biodegradable and properly managed. You\'ve earned points for your eco-friendly actions.';
+            pointsEarned.textContent = `+${points} Points`;
+            pointsEarned.style.display = 'inline-block';
+          } else {
+            resultIcon.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>';
+            resultText.textContent = 'Non-Biodegradable Waste Detected';
+            resultDetails.textContent = 'The waste in your video appears to be non-biodegradable. Please ensure you\'re properly sorting your waste before submission.';
+            pointsEarned.style.display = 'none';
+          }
+          
+          // Show verification result
+          aiVerification.style.display = 'block';
+          aiVerification.scrollIntoView({ behavior: 'smooth' });
+        }, 2500);
+      } else {
+        alert('Please select a video to upload.');
+      }
+    });
+
+    // Theme Toggle Logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Check for saved theme preference or respect OS preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      body.classList.add('dark-theme');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-theme');
+      const isDark = body.classList.contains('dark-theme');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      
+      // Update theme icon
+      themeToggle.textContent = isDark ? "☀️" : "🌙";
+    });
+
+    // Initialize theme icon
+    window.addEventListener('load', () => {
+      const isDark = body.classList.contains('dark-theme');
+      themeToggle.textContent = isDark ? "☀️" : "🌙";
+    });
+  </script>
+</body>
+</html>

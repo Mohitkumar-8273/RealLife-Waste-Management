@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenCycle - Waste Management Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2e7d32;
+            --secondary: #1b5e20;
+            --accent: #4caf50;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #facc15;
+            --danger: #f87171;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --eco-green: #4caf50;
+            --eco-blue: #2196f3;
+            --eco-yellow: #ffeb3b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1600864851437-2a7f77394380?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 25px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .hero-btn {
+            background: var(--eco-green);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .toggle-form a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .detail-card {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .detail-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .detail-card p {
+            color: var(--dark);
+            font-size: 18px;
+            word-break: break-word;
+        }
+
+        .rewards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .reward-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .reward-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        .reward-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .reward-body {
+            padding: 25px;
+        }
+
+        .reward-body p {
+            color: var(--dark);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .points {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .videos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .video-thumbnail {
+            height: 160px;
+            background: linear-gradient(45deg, var(--eco-green), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-info h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .video-info p {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .share-btn {
+            background: var(--eco-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .share-btn:hover {
+            background: #1976d2;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            border-top: 1px solid var(--light-gray);
+            margin-top: 30px;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .user-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>GreenCycle Waste Management</h1>
+            <p>Join our community to recycle smarter, earn rewards, and build a sustainable future together.</p>
+            <button class="hero-btn" id="getStartedBtn">Get Started</button>
+        </div>
+        
+        <header>
+            <div class="logo">
+                <i class="fas fa-recycle"></i>
+                <h1>GreenCycle Portal</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="http://127.0.0.1:3000/login.html" class="nav-link active" data-page="login">Login</a></li>
+                    <li><a href="#" class="nav-link" data-page="signup">Sign Up</a></li>
+                    <li><a href="#" class="nav-link" data-page="details">My Details</a></li>
+                    <li><a href="#" class="nav-link" data-page="rewards">Rewards</a></li>
+                    <li><a href="#" class="nav-link" data-page="videos">Videos</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="content">
+            <!-- Stats Section -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-leaf fa-2x" style="color: var(--eco-green);"></i>
+                    <div class="stat-value">12,500</div>
+                    <div class="stat-label">kg Waste Recycled</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users fa-2x" style="color: var(--eco-blue);"></i>
+                    <div class="stat-value">3,200</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-gift fa-2x" style="color: var(--eco-yellow);"></i>
+                    <div class="stat-value">8,750</div>
+                    <div class="stat-label">Rewards Redeemed</div>
+                </div>
+            </div>
+            
+            <!-- Login Page -->
+            <div id="login" class="page active">
+                <div class="form-container">
+                    <h2 class="form-title">Login to Your Account</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <div class="toggle-form">
+                        <p>Don't have an account? <a href="#" class="nav-link" data-page="signup">Sign Up</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Signup Page -->
+            <div id="signup" class="page">
+                <div class="form-container">
+                    <h2 class="form-title">Create Your Account</h2>
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" min="13" max="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address or UPI ID</label>
+                            <input type="text" id="address" placeholder="Enter your address or UPI ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit" class="btn">Sign Up</button>
+                    </form>
+                    <div class="toggle-form">
+                        <p>Already have an account? <a href="#" class="nav-link" data-page="login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Details Page -->
+            <div id="details" class="page">
+                <h2 class="form-title">Your Account Details</h2>
+                <div class="user-details">
+                    <div class="detail-card">
+                        <h3><i class="fas fa-user"></i> Personal Info</h3>
+                        <p><strong>Name:</strong> <span id="detailName">John Doe</span></p>
+                        <p><strong>Age:</strong> <span id="detailAge">28</span></p>
+                        <p><strong>Gender:</strong> <span id="detailGender">Male</span></p>
+                    </div>
+                    <div class="detail-card">
+                        <h3><i class="fas fa-envelope"></i> Contact</h3>
+                        <p><strong>Email:</strong> <span id="detailEmail">john.doe@example.com</span></p>
+                        <p><strong>Address/UPI:</strong> <span id="detailAddress">john@upi</span></p>
+                    </div>
+                    <div class="detail-card">
+                        <h3><i class="fas fa-shield-alt"></i> Account</h3>
+                        <p><strong>Status:</strong> <span style="color: var(--success);">Active</span></p>
+                        <p><strong>Member Since:</strong> <span id="detailJoined">January 2023</span></p>
+                        <p><strong>Points:</strong> <span id="detailPoints">1,250</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rewards Page -->
+            <div id="rewards" class="page">
+                <h2 class="form-title">Your Rewards</h2>
+                <div class="rewards-container">
+                    <div class="reward-card">
+                        <div class="reward-header">
+                            <h3><i class="fas fa-gift"></i> Welcome Bonus</h3>
+                        </div>
+                        <div class="reward-body">
+                            <p>Thank you for joining us! Here's a special welcome gift.</p>
+                            <div class="points">+500 Points</div>
+                            <button class="btn">Redeem Now</button>
+                        </div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-header">
+                            <h3><i class="fas fa-star"></i> Loyalty Reward</h3>
+                        </div>
+                        <div class="reward-body">
+                            <p>For being an active member for over 3 months.</p>
+                            <div class="points">+300 Points</div>
+                            <button class="btn">Redeem Now</button>
+                        </div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-header">
+                            <h3><i class="fas fa-percent"></i> Special Discount</h3>
+                        </div>
+                        <div class="reward-body">
+                            <p>Exclusive 20% off on your next purchase.</p>
+                            <div class="points">Coupon: WELCOME20</div>
+                            <button class="btn">Use Coupon</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Videos Page -->
+            <div id="videos" class="page">
+                <h2 class="form-title">Share Videos</h2>
+                <div class="videos-container">
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="video-info">
+                            <h3>How to Earn More Points</h3>
+                            <p>Learn the best strategies to maximize your rewards</p>
+                            <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="video-info">
+                            <h3>Redeeming Your Coupons</h3>
+                            <p>Step-by-step guide to using your discount coupons</p>
+                            <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="video-info">
+                            <h3>Exclusive Member Benefits</h3>
+                            <p>Discover all the perks of being a premium member</p>
+                            <button class="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 GreenCycle Waste Management. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        
+        // Navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.getAttribute('data-page');
+                
+                // Update active nav link
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show target page
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                    if (page.id === targetPage) {
+                        page.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Get Started Button
+        getStartedBtn.addEventListener('click', () => {
+            showPage('signup');
+        });
+        
+        // Form Submissions
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            // In a real app, you would validate credentials here
+            alert(`Login successful for ${email}!`);
+            // Redirect to details page after login
+            showPage('details');
+        });
+        
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // Save user data to localStorage (for demo purposes)
+            const userData = {
+                name: name,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                email: email,
+                address: document.getElementById('address').value,
+                joined: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+                points: '1,250'
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+            updateDetailsPage(userData);
+            
+            alert(`Account created successfully for ${name}!`);
+            // Redirect to details page after signup
+            showPage('details');
+        });
+        
+        // Show specific page
+        function showPage(pageId) {
+            // Update active nav link
+            navLinks.forEach(nav => {
+                nav.classList.remove('active');
+                if (nav.getAttribute('data-page') === pageId) {
+                    nav.classList.add('active');
+                }
+            });
+            
+            // Show target page
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                }
+            });
+        }
+        
+        // Update details page with user data
+        function updateDetailsPage(userData) {
+            document.getElementById('detailName').textContent = userData.name;
+            document.getElementById('detailAge').textContent = userData.age;
+            document.getElementById('detailGender').textContent = userData.gender.charAt(0).toUpperCase() + userData.gender.slice(1);
+            document.getElementById('detailEmail').textContent = userData.email;
+            document.getElementById('detailAddress').textContent = userData.address;
+            document.getElementById('detailJoined').textContent = userData.joined;
+            document.getElementById('detailPoints').textContent = userData.points;
+        }
+        
+        // Initialize details page with stored data
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedData = localStorage.getItem('userData');
+            if (storedData) {
+                const userData = JSON.parse(storedData);
+                updateDetailsPage(userData);
+            }
+            
+            // Add share functionality to video buttons
+            const shareButtons = document.querySelectorAll('.share-btn');
+            shareButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const videoTitle = button.closest('.video-info').querySelector('h3').textContent;
+                    alert(`Sharing "${videoTitle}"...`);
+                    // In a real app, this would open sharing options
+                });
+            });
+        });
+    </script>
+</body>
+</html>
